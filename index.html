@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seoul K-Beauty Hair Salon - Your Trusted Stylists in Korea</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: #3B3A3A;
+      background-color: #FFFFFF;
+      overflow-x: hidden;
+    }
+    .section {
+      padding: 4rem 1rem;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    /* Updated Hero Image to use a placeholder for Korean female model */
+    .hero-image {
+      background-image: url('https://example.com/korean-female-model.jpg');
+      background-size: cover;
+      background-position: center;
+      height: 80vh;
+      position: relative;
+    }
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* Updated primary button using Golden Peach and Warm Coral hover */
+    .btn-primary {
+      background-color: #F4C27A;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.375rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      background-color: #FFB5A7;
+      transform: translateY(-2px);
+    }
+    /* Cards & FAQ form background with Clean White */
+    .card {
+      background: #FDFDFD;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+    .nationality-tag {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-right: 0.5rem;
+      background-color: #FFB5A7;
+      color: white;
+    }
+    .stylist-image {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto;
+    }
+    .floating-button {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 100;
+    }
+    .language-selector {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      z-index: 10;
+    }
+    .faq-item {
+      border-bottom: 1px solid #e5e7eb;
+      padding: 1rem 0;
+    }
+    .faq-question {
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .faq-answer {
+      padding-top: 1rem;
+      display: none;
+    }
+    .faq-answer.active {
+      display: block;
+    }
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .review-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 2rem;
+    }
+    .stylist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+    @media (max-width: 768px) {
+      .service-grid, .review-grid, .stylist-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    /* Style tabs custom button styles */
+    .tab-btn {
+      padding: 0.5rem 1rem;
+      margin: 0.25rem;
+      border-radius: 9999px;
+      border: 1px solid #FFB5A7;
+      background-color: #FDFDFD;
+      color: #3B3A3A;
+      transition: background-color 0.3s ease;
+    }
+    .tab-btn.active, .tab-btn:hover {
+      background-color: #F4C27A;
+      color: white;
+    }
+    
+    /* Section divider */
+    .section-divider {
+      height: 2px;
+      width: 60px;
+      background-color: #FFB5A7;
+      margin: 0 auto 1.5rem auto;
+    }
+    
+    /* Contact card styles */
+    .contact-card {
+      background-color: #FDFDFD;
+      border: 1px solid #f4c6b0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Language Selector -->
+  <div class="language-selector bg-white px-3 py-2 rounded-full shadow-md">
+    <button class="px-2 py-1 rounded-full bg-[#F4C27A] text-white">EN</button>
+    <button class="px-2 py-1 rounded-full">KO</button>
+    <button class="px-2 py-1 rounded-full">JP</button>
+  </div>
+
+  <!-- Floating Book Now Button -->
+  <a href="#reservation" class="floating-button btn-primary shadow-lg flex items-center">
+    <span>Book Now</span>
+    <i class="fas fa-arrow-right ml-2"></i>
+  </a>
+
+  <!-- Hero Section -->
+  <section id="hero" class="relative">
+    <div class="hero-image">
+      <div class="hero-overlay">
+        <div class="text-center text-white px-4">
+          <h1 class="text-4xl md:text-6xl font-bold mb-4">Your Trusted K-Beauty Hair Salon</h1>
+          <p class="text-xl md:text-2xl mb-8">Welcoming Global Travelers</p>
+          <a href="#reservation" class="btn-primary inline-block">
+            Book Now
+            <span class="block text-sm mt-1">Get a response within 24 hours</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Style Section -->
+  <section id="styles" class="section" style="background-color: #FFFFFF;">
+    <div class="container">
+      <div class="section-divider"></div>
+      <h2 class="text-3xl font-bold text-center mb-12">Our Signature Styles</h2>
+      
+      <!-- Category Tabs -->
+      <div id="style-tabs" class="flex flex-wrap justify-center mb-8">
+        <button class="tab-btn active" data-filter="all">All</button>
+        <button class="tab-btn" data-filter="cut">Cut</button>
+        <button class="tab-btn" data-filter="perm">Perm</button>
+        <button class="tab-btn" data-filter="color">Color</button>
+        <button class="tab-btn" data-filter="styling">Styling</button>
+        <button class="tab-btn" data-filter="treatment">Treatment</button>
+      </div>
+      
+      <!-- Style Grid -->
+      <div id="style-grid" class="service-grid">
+        <!-- Cut Style 1 -->
+        <div class="card" data-category="cut">
+          <div class="h-48 bg-gray-200" style="background-image: url('https://example.com/korean-layered-cut.jpg'); background-size: cover; background-position: center;"></div>
+          <div class="p-4">
+            <h3 class="font-bold text-lg">Korean Layered Cut</h3>
+            <p class="text-sm mb-2">Soft, feminine layers that frame the face beautifully</p>
+            <div class="flex justify-between text-sm mb-3">
+              <span>Duration: 60 mins</span>
+              <span>₩60,000</span>
+            </div>
+            <div class="flex space-x-2">
+              <a href="#reservation" class="btn-primary text-sm py-1 px-3">Book</a>
+              <button class="bg-gray-200 text-gray-700 text-sm py-1 px-3 rounded">See Reviews</button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Perm Style 1 -->
+        <div class="card" data-category="perm">
+          <div class="h-48 bg-gray-200" style="background-image: url('https://example.com/natural-wave-perm.jpg'); background-size: cover; background-position: center;"></div>
+          <div class="p-4">
+            <h3 class="font-bold text-lg">Natural Wave Perm</h3>
+            <p class="text-sm mb-2">Gentle waves that create volume and movement</p>
+            <div class="flex justify-between text-sm mb-3">
+              <span>Duration: 120 mins</span>
+              <span>₩120,000</span>
+            </div>
+            <div class="flex space-x-2">
+              <a href="#reservation" class="btn-primary text-sm py-1 px-3">Book</a>
+              <button class="bg-gray-200 text-gray-700 text-sm py-1 px-3 rounded">See Reviews</button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Color Style 1 -->
+        <div class="card" data-category="color">
+          <div class="h-48 bg-gray-200" style="background-image: url('https://example.com/milktea-brown.jpg'); background-size: cover; background-position: center;"></div>
+          <div class="p-4">
+            <h3 class="font-bold text-lg">Milktea Brown</h3>
+            <p class="text-sm mb-2">Trendy light brown shade popular in Korea</p>
+            <div class="flex justify-between text-sm mb-3">
+              <span>Duration: 150 mins</span>
+              <span>₩150,000</span>
+            </div>
+            <div class="flex space-x-2">
+              <a href="#reservation" class="btn-primary text-sm py-1 px-3">Book</a>
+              <button class="bg-gray-200 text-gray-700 text-sm py-1 px-3 rounded">See Reviews</button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Styling 1 -->
+        <div class="card" data-category="styling">
+          <div class="h-48 bg-gray-200" style="background-image: url('https://example.com/kdrama-blowout.jpg'); background-size: cover; background-position: center;"></div>
+          <div class="p-4">
+            <h3 class="font-bold text-lg">K-Drama Blowout</h3>
+            <p class="text-sm mb-2">Smooth, voluminous style seen in Korean dramas</p>
+            <div class="flex justify-between text-sm mb-3">
+              <span>Duration: 45 mins</span>
+              <span>₩50,000</span>
+            </div>
+            <div class="flex space-x-2">
+              <a href="#reservation" class="btn-primary text-sm py-1 px-3">Book</a>
+              <button class="bg-gray-200 text-gray-700 text-sm py-1 px-3 rounded">See Reviews</button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Treatment 1 -->
+        <div class="card" data-category="treatment">
+          <div class="h-48 bg-gray-200" style="background-image: url('https://example.com/protein-treatment.jpg'); background-size: cover; background-position: center;"></div>
+          <div class="p-4">
+            <h3 class="font-bold text-lg">Protein Treatment</h3>
+            <p class="text-sm mb-2">Deep repair for damaged hair with Korean techniques</p>
+            <div class="flex justify-between text-sm mb-3">
+              <span>Duration: 60 mins</span>
+              <span>₩70,000</span>
+            </div>
+            <div class="flex space-x-2">
+              <a href="#reservation" class="btn-primary text-sm py-1 px-3">Book</a>
+              <button class="bg-gray-200 text-gray-700 text-sm py-1 px-3 rounded">See Reviews</button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Treatment 2 -->
+        <div class="card" data-category="treatment">
+          <div class="h-48 bg-gray-200" style="background-image: url('https://example.com/scalp-care.jpg'); background-size: cover; background-position: center;"></div>
+          <div class="p-4">
+            <h3 class="font-bold text-lg">Scalp Care Package</h3>
+            <p class="text-sm mb-2">Luxury scalp treatment with massage</p>
+            <div class="flex justify-between text-sm mb-3">
+              <span>Duration: 60 mins</span>
+              <span>₩80,000</span>
+            </div>
+            <div class="flex space-x-2">
+              <a href="#reservation" class="btn-primary text-sm py-1 px-3">Book</a>
+              <button class="bg-gray-200 text-gray-700 text-sm py-1 px-3 rounded">See Reviews</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Review Section -->
+  <section id="reviews" class="section" style="background-color: #FEE7E2;">
+    <div class="container">
+      <div class="section-divider"></div>
+      <h2 class="text-3xl font-bold text-center mb-12">Customer Reviews</h2>
+      <div class="review-grid">
+        <!-- Review 1 -->
+        <div class="card">
+          <div class="p-6">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 rounded-full bg-gray-300 mr-4"></div>
+              <div>
+                <h4 class="font-bold">Emma J.</h4>
+                <div>
+                  <span class="nationality-tag">USA</span>
+                  <span class="text-yellow-500">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <p class="mb-4">"I was nervous to get my hair done in a foreign country, but my stylist Min-ji was amazing! She understood exactly what I wanted and the Natural Wave Perm looks perfect. Will definitely come back!"</p>
+            <p class="text-sm mb-3">Service: Natural Wave Perm</p>
+            <div class="flex space-x-2">
+              <div class="w-1/2 h-32 bg-gray-200 rounded"></div>
+              <div class="w-1/2 h-32 bg-gray-200 rounded"></div>
+            </div>
+          </div>
+        </div>
+        <!-- Review 2 -->
+        <div class="card">
+          <div class="p-6">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 rounded-full bg-gray-300 mr-4"></div>
+              <div>
+                <h4 class="font-bold">Sophie L.</h4>
+                <div>
+                  <span class="nationality-tag">France</span>
+                  <span class="text-yellow-500">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <p class="mb-4">"The Milktea Brown color turned out exactly as I hoped! The staff was so friendly and made me feel comfortable despite the language barrier. Highly recommend this salon!"</p>
+            <p class="text-sm mb-3">Service: Milktea Brown Coloring</p>
+            <div class="flex space-x-2">
+              <div class="w-1/2 h-32 bg-gray-200 rounded"></div>
+              <div class="w-1/2 h-32 bg-gray-200 rounded"></div>
+            </div>
+          </div>
+        </div>
+        <!-- Review 3 -->
+        <div class="card">
+          <div class="p-6">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 rounded-full bg-gray-300 mr-4"></div>
+              <div>
+                <h4 class="font-bold">Mei T.</h4>
+                <div>
+                  <span class="nationality-tag">China</span>
+                  <span class="text-yellow-500">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <p class="mb-4">"I got the Korean Layered Cut and it suits my face shape perfectly! The booking process was easy and they responded to my reservation quickly. The salon is clean and stylish too."</p>
+            <p class="text-sm mb-3">Service: Korean Layered Cut</p>
+            <div class="flex space-x-2">
+              <div class="w-1/2 h-32 bg-gray-200 rounded"></div>
+              <div class="w-1/2 h-32 bg-gray-200 rounded"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stylists Section -->
+  <section id="stylists" class="section" style="background-color: #FFFFFF;">
+    <div class="container">
+      <div class="section-divider"></div>
+      <h2 class="text-3xl font-bold text-center mb-6">Our Stylists</h2>
+      <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">Our team of experienced stylists specializes in creating the perfect look for every guest, combining Korean beauty trends with personalized service for international visitors.</p>
+      
+      <div class="stylist-grid">
+        <!-- Stylist 1 -->
+        <div class="card text-center p-6">
+          <div class="stylist-image bg-gray-200 mb-4" style="background-image: url('https://example.com/stylist-minji.jpg'); background-size: cover; background-position: center;"></div>
+          <h3 class="font-bold text-lg">Min-ji Kim</h3>
+          <p class="mb-2" style="color: #FFB5A7;">Senior Stylist & Founder</p>
+          <p class="text-sm mb-3">Experience: 15 years</p>
+          <p class="text-sm">Specialties: Perm, Color Correction</p>
+          <p class="text-sm mt-4">Fluent in: English, Korean, Japanese</p>
+        </div>
+        <!-- Stylist 2 -->
+        <div class="card text-center p-6">
+          <div class="stylist-image bg-gray-200 mb-4" style="background-image: url('https://example.com/stylist-jihoon.jpg'); background-size: cover; background-position: center;"></div>
+          <h3 class="font-bold text-lg">Ji-hoon Park</h3>
+          <p class="mb-2" style="color: #FFB5A7;">Creative Director</p>
+          <p class="text-sm mb-3">Experience: 10 years</p>
+          <p class="text-sm">Specialties: Cutting, Styling</p>
+          <p class="text-sm mt-4">Fluent in: English, Korean</p>
+        </div>
+        <!-- Stylist 3 -->
+        <div class="card text-center p-6">
+          <div class="stylist-image bg-gray-200 mb-4" style="background-image: url('https://example.com/stylist-soojin.jpg'); background-size: cover; background-position: center;"></div>
+          <h3 class="font-bold text-lg">Soo-jin Lee</h3>
+          <p class="mb-2" style="color: #FFB5A7;">Color Specialist</p>
+          <p class="text-sm mb-3">Experience: 8 years</p>
+          <p class="text-sm">Specialties: Coloring, Balayage</p>
+          <p class="text-sm mt-4">Fluent in: English, Korean, Chinese</p>
+        </div>
+        <!-- Stylist 4 -->
+        <div class="card text-center p-6">
+          <div class="stylist-image bg-gray-200 mb-4" style="background-image: url('https://example.com/stylist-yeonhee.jpg'); background-size: cover; background-position: center;"></div>
+          <h3 class="font-bold text-lg">Yeon-hee Choi</h3>
+          <p class="mb-2" style="color: #FFB5A7;">Treatment Expert</p>
+          <p class="text-sm mb-3">Experience: 7 years</p>
+          <p class="text-sm">Specialties: Scalp Treatment, Hair Care</p>
+          <p class="text-sm mt-4">Fluent in: English, Korean</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reservation Section with Tally Embed -->
+  <section id="reservation" class="section" style="background-color: #FFFFFF;">
+    <div class="container">
+      <div class="section-divider"></div>
+      <h2 class="text-3xl font-bold text-center mb-6">Book Your Appointment</h2>
+      <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">Let us know your preferred date and time, and we'll get back to you within 24 hours to confirm your appointment.</p>
+      
+      <div class="max-w-2xl mx-auto" style="background-color: #FEE7E2; padding: 2rem; border-radius: 1rem; box-shadow: 0 4px 8px rgba(0,0,0,0.05);">
+        <iframe data-tally-src="https://tally.so/embed/wLoK4J?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="2104" frameborder="0" marginheight="0" marginwidth="0" title="Book Your Hair Appointment"></iframe>
+        <script>
+          var d=document,w="https://tally.so/widgets/embed.js",v=function(){
+            if (typeof Tally !== "undefined") {
+              Tally.loadEmbeds();
+            } else {
+              d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach(function(e){
+                e.src = e.dataset.tallySrc
+              });
+            }
+          };
+          if(typeof Tally !== "undefined") {
+            v();
+          } else if(d.querySelector('script[src="'+w+'"]')==null){
+            var s=d.createElement("script");
+            s.src=w; s.onload=v; s.onerror=v; d.body.appendChild(s);
+          }
+        </script>
+      </div>
+      
+      <div class="max-w-2xl mx-auto mt-12 bg-[#FDFDFD] p-6 rounded-lg shadow-md">
+        <h3 class="text-lg font-bold mb-3">Payment Information</h3>
+        <p class="mb-4 text-gray-600">We accept the following payment methods in our salon:</p>
+        <div class="flex flex-wrap justify-center gap-4 mb-4">
+          <i class="fab fa-cc-visa text-3xl text-blue-700"></i>
+          <i class="fab fa-cc-mastercard text-3xl text-red-500"></i>
+          <i class="fab fa-cc-amex text-3xl text-blue-500"></i>
+          <i class="fab fa-cc-paypal text-3xl text-blue-800"></i>
+          <span class="text-3xl font-light text-gray-700">Cash</span>
+        </div>
+        <p class="text-sm text-gray-600">A 20% deposit may be required for certain services after your appointment is confirmed.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section id="faq" class="section" style="background-color: #FEE7E2;">
+    <div class="container">
+      <div class="section-divider"></div>
+      <h2 class="text-3xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+      <div class="max-w-3xl mx-auto">
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>How do I make a reservation?</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>You can book an appointment through our website by filling out the reservation form. We'll get back to you within 24 hours to confirm your appointment. Alternatively, you can contact us via LINE, WhatsApp, or email.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>What is your cancellation policy?</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>We understand that plans change. Please let us know at least 24 hours in advance if you need to cancel or reschedule. For cancellations with less than 24 hours notice, a 20% fee may apply if a deposit was made.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Is tipping customary?</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>Tipping is not required or expected in Korea, but it is appreciated if you are particularly satisfied with the service. Our priority is your satisfaction, not additional compensation.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>What happens if I'm late for my appointment?</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>We understand that navigating a foreign city can be challenging. Please try to arrive on time, but if you're running late, call us as soon as possible. We'll try our best to accommodate you, but if you're more than 15 minutes late, we may need to reschedule or adjust your service.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Do your stylists speak English?</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>Yes, all of our stylists speak English at varying levels of proficiency. Some of our stylists also speak Japanese and Chinese. We'll make sure to match you with a stylist who can communicate with you effectively.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>How can I share what style I want?</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>We recommend bringing photos of the styles you like. Our stylists are experienced in working with international clients and will take time to understand exactly what you want. Feel free to share reference images when booking or during your consultation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="section" style="background-color: #FFFFFF;">
+    <div class="container">
+      <div class="section-divider"></div>
+      <h2 class="text-3xl font-bold text-center mb-12">Visit Us</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div class="contact-card">
+          <div class="w-full h-80 bg-gray-300 mb-6 rounded"></div>
+          <div class="mb-6">
+            <h4 class="font-bold text-lg mb-2">Address</h4>
+            <p class="text-gray-600">123 Gangnam-daero, Gangnam-gu, Seoul, South Korea</p>
+          </div>
+          <div class="mb-6">
+            <h4 class="font-bold text-lg mb-2">Hours</h4>
+            <p class="text-gray-600">Monday - Sunday: 10:00 AM - 8:00 PM</p>
+          </div>
+          <div class="mb-6">
+            <h4 class="font-bold text-lg mb-2">How to Get Here</h4>
+            <p class="text-gray-600 mb-2"><i class="fas fa-subway mr-2" style="color: #FFB5A7;"></i> Gangnam Station (Line 2), Exit 5. Walk straight for 3 minutes.</p>
+            <p class="text-gray-600"><i class="fas fa-bus mr-2" style="color: #FFB5A7;"></i> Bus lines 143, 462, 4411 - Get off at Gangnam Station.</p>
+          </div>
+        </div>
+        <div class="contact-card">
+          <div class="mb-8">
+            <h4 class="font-bold text-lg mb-4">Connect With Us</h4>
+            <div class="flex space-x-4 mb-6">
+              <a href="#" class="text-2xl" style="color: #F4C27A;"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="text-2xl" style="color: #F4C27A;"><i class="fab fa-line"></i></a>
+              <a href="#" class="text-2xl" style="color: #F4C27A;"><i class="fab fa-facebook"></i></a>
+            </div>
+            <p class="text-gray-600 mb-4"><i class="fas fa-envelope mr-2" style="color: #F4C27A;"></i> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8fe6e1e9e0cffceae0fae3e4edeaeefafbf6fceee3e0e1a1ece0e2">[email protected]</a></p>
+            <p class="text-gray-600"><i class="fas fa-phone mr-2" style="color: #F4C27A;"></i> +82-2-555-1234</p>
+          </div>
+          <div class="bg-[#FDFDFD] p-6 rounded-lg shadow-md">
+            <h4 class="font-bold text-lg mb-4">Special Offers</h4>
+            <div class="mb-4 p-3 border border-[#FFB5A7] rounded-md bg-[#FEE7E2]">
+              <p class="font-medium">💬 Leave a Review, Get 10% Off</p>
+              <p class="text-sm text-gray-600">Share your experience on Instagram and tag us for 10% off your next visit!</p>
+            </div>
+            <div class="p-3 border border-[#FFB5A7] rounded-md bg-[#FEE7E2]">
+              <p class="font-medium">🎁 Bring a Friend Discount</p>
+              <p class="text-sm text-gray-600">Bring a friend and you both receive 15% off any service!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-8">
+    <div class="container text-center">
+      <h3 class="text-xl font-bold mb-4">Seoul K-Beauty Hair Salon</h3>
+      <p class="mb-6">Your Trusted K-Beauty Hair Salon in Seoul</p>
+      <div class="flex justify-center space-x-4 mb-6">
+        <a href="#" class="hover:text-[#F4C27A]"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="hover:text-[#F4C27A]"><i class="fab fa-line"></i></a>
+        <a href="#" class="hover:text-[#F4C27A]"><i class="fab fa-facebook"></i></a>
+      </div>
+      <p class="text-sm text-gray-400">&copy; 2023 Seoul K-Beauty Hair Salon. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+  <script>
+    // FAQ Accordion
+    document.querySelectorAll('.faq-question').forEach(question => {
+      question.addEventListener('click', () => {
+        const answer = question.nextElementSibling;
+        answer.classList.toggle('active');
+        question.querySelector('i').classList.toggle('fa-chevron-up');
+        question.querySelector('i').classList.toggle('fa-chevron-down');
+      });
+    });
+
+    // Style Tabs Filtering
+    document.addEventListener('DOMContentLoaded', function() {
+      const tabs = document.querySelectorAll('#style-tabs .tab-btn');
+      const cards = document.querySelectorAll('#style-grid .card');
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          // Remove active class on all tabs
+          tabs.forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+          const filter = this.getAttribute('data-filter');
+          cards.forEach(card => {
+            if(filter === 'all' || card.getAttribute('data-category') === filter) {
+              card.style.display = 'block';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+    });
+
+    // Floating Book Now Button behavior during Reservation Section scroll
+    document.addEventListener('DOMContentLoaded', function() {
+      const floatingBtn = document.querySelector('.floating-button');
+      const reservationSection = document.querySelector('#reservation');
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if(entry.isIntersecting) {
+            floatingBtn.style.display = 'none';
+          } else {
+            floatingBtn.style.display = 'flex';
+          }
+        });
+      }, { root: null, threshold: 0.1 });
+
+      observer.observe(reservationSection);
+    });
+    
+    // Remove form submission since Tally embed handles it (if needed)
+  </script>
+</body>
+</html>
