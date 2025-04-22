@@ -740,41 +740,59 @@ async function loadSheetData() {
       console.error('스타일 그리드 요소를 찾을 수 없음');
     }
     
-    // 메인 정보 로드
-    const mainInfoSheet = await fetchSheet(spreadsheetId, 'Main Info');
-    if (mainInfoSheet) {
-      processMainInfo(mainInfoSheet, currentLang);
-    }
-    
-    // 헤어스타일 정보 로드
-    const hairstylesSheet = await fetchSheet(spreadsheetId, 'Hairstyles');
-    if (hairstylesSheet) {
-      processHairstyles(hairstylesSheet, currentLang);
-    }
-    
-    // 스타일리스트 정보 로드
-    const stylistsSheet = await fetchSheet(spreadsheetId, 'Stylists');
-    if (stylistsSheet) {
-      processStylists(stylistsSheet, currentLang);
-    }
-    
-    // 후기 정보 로드
-    const reviewsSheet = await fetchSheet(spreadsheetId, 'Reviews');
-    if (reviewsSheet) {
-      processReviews(reviewsSheet, currentLang);
-    }
-    
-    // FAQ 정보 로드
-    const faqSheet = await fetchSheet(spreadsheetId, 'FAQ');
-    if (faqSheet) {
-      processFAQ(faqSheet, currentLang);
-    }
-    
-    // 연락처 정보 로드
-    const contactSheet = await fetchSheet(spreadsheetId, 'Contact');
-    if (contactSheet) {
-      processContact(contactSheet, currentLang);
-    }
+   // 메인 정보 로드
+const mainInfoSheet = await fetchSheet(spreadsheetId, '1. 메인 정보 (Main Info)');
+if (mainInfoSheet) {
+  processMainInfo(mainInfoSheet, currentLang);
+  console.log('메인 정보 로드 성공');
+} else {
+  console.error('메인 정보 로드 실패');
+}
+
+// 헤어스타일 정보 로드
+const hairstylesSheet = await fetchSheet(spreadsheetId, '2. 헤어 스타일 (Hairstyles)');
+if (hairstylesSheet) {
+  processHairstyles(hairstylesSheet, currentLang);
+  console.log('헤어스타일 정보 로드 성공');
+} else {
+  console.error('헤어스타일 정보 로드 실패');
+}
+
+// 스타일리스트 정보 로드
+const stylistsSheet = await fetchSheet(spreadsheetId, '3. 스타일리스트 (Stylists)');
+if (stylistsSheet) {
+  processStylists(stylistsSheet, currentLang);
+  console.log('스타일리스트 정보 로드 성공');
+} else {
+  console.error('스타일리스트 정보 로드 실패');
+}
+
+// 후기 정보 로드
+const reviewsSheet = await fetchSheet(spreadsheetId, '4. 후기 (Reviews)');
+if (reviewsSheet) {
+  processReviews(reviewsSheet, currentLang);
+  console.log('후기 정보 로드 성공');
+} else {
+  console.error('후기 정보 로드 실패');
+}
+
+// FAQ 정보 로드
+const faqSheet = await fetchSheet(spreadsheetId, '5. FAQ (자주 묻는 질문)');
+if (faqSheet) {
+  processFAQ(faqSheet, currentLang);
+  console.log('FAQ 정보 로드 성공');
+} else {
+  console.error('FAQ 정보 로드 실패');
+}
+
+// 연락처 정보 로드
+const contactSheet = await fetchSheet(spreadsheetId, '6. 연락처 (Contact)');
+if (contactSheet) {
+  processContact(contactSheet, currentLang);
+  console.log('연락처 정보 로드 성공');
+} else {
+  console.error('연락처 정보 로드 실패');
+}
   } catch (error) {
     console.error('데이터 로드 중 오류 발생:', error);
   }
