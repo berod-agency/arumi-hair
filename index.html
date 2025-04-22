@@ -8,7 +8,17 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
+ <style>
+    /* 
+    * 메인 컬러 팔레트:
+    * 프라이머리: #E56B6F (장미 핑크) - 강조, 버튼, 주요 요소
+    * 세컨더리: #EAAC8B (복숭아) - 호버 상태, 태그, 보조 요소
+    * 액센트: #D1887F (테라코타) - 섹션 구분선, 아이콘
+    * 배경색 2종: 
+    *   #FFF5F5 (라이트 핑크) - 섹션 배경 색
+    *   #FFFFFF (화이트) - 기본 배경 색
+    */
+    
     body {
       font-family: 'Poppins', sans-serif;
       color: #3B3A3A;
@@ -41,9 +51,9 @@
       align-items: center;
       justify-content: center;
     }
-    /* Updated primary button using Golden Peach and Warm Coral hover */
+    /* Updated primary button colors */
     .btn-primary {
-      background-color: #D66D75;
+      background-color: #E56B6F;
       color: white;
       padding: 0.75rem 1.5rem;
       border-radius: 0.375rem;
@@ -51,7 +61,7 @@
       transition: all 0.3s ease;
     }
     .btn-primary:hover {
-      background-color: #E8A6A1;
+      background-color: #EAAC8B;
       transform: translateY(-2px);
     }
     /* Cards & FAQ form background with Clean White */
@@ -73,7 +83,7 @@
       font-size: 0.75rem;
       font-weight: 500;
       margin-right: 0.5rem;
-      background-color: #FFB5A7;
+      background-color: #EAAC8B;
       color: white;
     }
     .stylist-image {
@@ -138,28 +148,28 @@
       padding: 0.5rem 1rem;
       margin: 0.25rem;
       border-radius: 9999px;
-      border: 1px solid #FFB5A7;
+      border: 1px solid #EAAC8B;
       background-color: #FDFDFD;
       color: #3B3A3A;
       transition: background-color 0.3s ease;
     }
     .tab-btn.active, .tab-btn:hover {
-      background-color: #F4C27A;
+      background-color: #E56B6F;
       color: white;
     }
     
-    /* Section divider */
+    /* Section divider - updated color */
     .section-divider {
       height: 2px;
       width: 60px;
-      background-color: #FFB5A7;
+      background-color: #D1887F;
       margin: 0 auto 1.5rem auto;
     }
     
     /* Contact card styles */
     .contact-card {
       background-color: #FDFDFD;
-      border: 1px solid #f4c6b0;
+      border: 1px solid #EAAC8B;
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
       border-radius: 0.5rem;
       padding: 1.5rem;
