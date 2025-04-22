@@ -693,5 +693,484 @@
     
     // Remove form submission since Tally embed handles it (if needed)
   </script>
+        
+      <!-- 스프레드시트 연동 코드 -->
+      <script>
+      // 이 코드를 HTML 파일의 </body> 태그 바로 앞에 추가하세요
+// Google Sheets API 연동 코드
+document.addEventListener('DOMContentLoaded', function() {
+  loadSheetData();
+});
+
+// 스프레드시트 데이터 로드 함수
+async function loadSheetData() {
+  // 스프레드시트 ID
+  const spreadsheetId = '1nkggHgQwE2eXToAx2OzJzZueJqdAVS18b8D1Wo1CJtY';
+  // 공개 액세스를 위해 스프레드시트를 웹에 게시해야 합니다(File > Share > Publish to web)
+  
+  // 기본 언어 설정 (en, ko, jp)
+  let currentLang = 'en'; // 기본값은 영어
+  
+  // 언어 버튼 이벤트 리스너 추가
+  document.querySelectorAll('.language-selector button').forEach(button => {
+    button.addEventListener('click', function() {
+      // 모든 버튼에서 활성 클래스 제거
+      document.querySelectorAll('.language-selector button').forEach(btn => {
+        btn.classList.remove('bg-[#E56B6F]', 'text-white');
+      });
+      
+      // 클릭한 버튼에 활성 클래스 추가
+      this.classList.add('bg-[#E56B6F]', 'text-white');
+      
+      // 언어 변경 및 콘텐츠 업데이트
+      currentLang = this.textContent.toLowerCase();
+      updateContent(currentLang);
+    });
+  });
+  
+  try {
+    // 메인 정보 로드
+    const mainInfoSheet = await fetchSheet(spreadsheetId, 'Main Info');
+    if (mainInfoSheet) {
+      processMainInfo(mainInfoSheet, currentLang);
+    }
+    
+    // 헤어스타일 정보 로드
+    const hairstylesSheet = await fetchSheet(spreadsheetId, 'Hairstyles');
+    if (hairstylesSheet) {
+      processHairstyles(hairstylesSheet, currentLang);
+    }
+    
+    // 스타일리스트 정보 로드
+    const stylistsSheet = await fetchSheet(spreadsheetId, 'Stylists');
+    if (stylistsSheet) {
+      processStylists(stylistsSheet, currentLang);
+    }
+    
+    // 후기 정보 로드
+    const reviewsSheet = await fetchSheet(spreadsheetId, 'Reviews');
+    if (reviewsSheet) {
+      processReviews(reviewsSheet, currentLang);
+    }
+    
+    // FAQ 정보 로드
+    const faqSheet = await fetchSheet(spreadsheetId, 'FAQ');
+    if (faqSheet) {
+      processFAQ(faqSheet, currentLang);
+    }
+    
+    // 연락처 정보 로드
+    const contactSheet = await fetchSheet(spreadsheetId, 'Contact');
+    if (contactSheet) {
+      processContact(contactSheet, currentLang);
+    }
+  } catch (error) {
+    console.error('데이터 로드 중 오류 발생:', error);
+  }
+}
+
+// Google Sheets API를 통해 시트 데이터 가져오기
+async function fetchSheet(spreadsheetId, sheetName) {
+  try {
+    // 공개된 스프레드시트의 CSV 형식으로 데이터 가져오기
+    const response = await fetch(`https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}`);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const csvText = await response.text();
+    
+    // CSV 파싱 (간단한 파싱, 실제로는 Papa Parse 같은 라이브러리 사용 권장)
+    const rows = parseCSV(csvText);
+    
+    if (rows.length > 0) {
+      return rows;
+    } else {
+      throw new Error('시트 데이터가 비어있습니다.');
+    }
+  } catch (error) {
+    console.error(`${sheetName} 시트 로드 중 오류 발생:`, error);
+    return null;
+  }
+}
+
+// 간단한 CSV 파서 (큰따옴표로 묶인 값 처리, 쉼표 구분)
+function parseCSV(csvText) {
+  const lines = csvText.split('\n');
+  return lines.map(line => {
+    // 간단한 CSV 파싱 (큰따옴표로 묶인 경우 처리)
+    const values = [];
+    let inQuotes = false;
+    let currentValue = '';
+    let i = 0;
+    
+    while (i < line.length) {
+      const char = line[i];
+      
+      if (char === '"') {
+        inQuotes = !inQuotes;
+        i++;
+      } else if (char === ',' && !inQuotes) {
+        values.push(currentValue);
+        currentValue = '';
+        i++;
+      } else {
+        currentValue += char;
+        i++;
+      }
+    }
+    
+    values.push(currentValue); // 마지막 값 추가
+    return values;
+  });
+}
+
+// 메인 정보 처리 및 업데이트
+function processMainInfo(data, lang) {
+  // 헤더 행을 제외한 데이터 처리
+  const rows = data.slice(1);
+  
+  // 언어에 맞는 값 열 인덱스 찾기
+  const headerRow = data[0];
+  const langColumnIndex = headerRow.findIndex(header => header.toLowerCase() === `value_${lang}`);
+  
+  if (langColumnIndex === -1) {
+    console.error(`${lang} 언어에 대한 열을 찾을 수 없습니다.`);
+    return;
+  }
+  
+  // 각 행을 순회하며 데이터 처리
+  rows.forEach(row => {
+    const section = row[1];
+    const key = row[2];
+    const value = row[langColumnIndex];
+    
+    // 섹션과 키에 따른 요소 업데이트
+    if (section === 'site' && key === 'title') {
+      document.title = value;
+    }
+    
+    if (section === 'hero') {
+      if (key === 'headline') {
+        document.querySelector('#hero h1').textContent = value;
+      }
+      if (key === 'subheadline') {
+        document.querySelector('#hero p').textContent = value;
+      }
+      if (key === 'button_text') {
+        document.querySelectorAll('.btn-primary span:first-child').forEach(el => {
+          el.textContent = value;
+        });
+      }
+      if (key === 'button_subtext') {
+        document.querySelectorAll('.btn-primary span.block').forEach(el => {
+          el.textContent = value;
+        });
+      }
+      if (key === 'image_url' && value) {
+        document.querySelector('.hero-image').style.backgroundImage = `url('${value}')`;
+      }
+    }
+  });
+}
+
+// 헤어스타일 데이터 처리 및 업데이트
+function processHairstyles(data, lang) {
+  // 헤더 행 가져오기
+  const headers = data[0];
+  
+  // 열 인덱스 찾기
+  const nameIndex = headers.findIndex(header => header.toLowerCase() === `name_${lang}`);
+  const descIndex = headers.findIndex(header => header.toLowerCase() === `description_${lang}`);
+  const categoryIndex = headers.findIndex(header => header.toLowerCase() === 'category');
+  const durationIndex = headers.findIndex(header => header.toLowerCase() === 'duration');
+  const priceIndex = headers.findIndex(header => header.toLowerCase() === 'price');
+  const imageIndex = headers.findIndex(header => header.toLowerCase() === 'image_url');
+  
+  if (nameIndex === -1 || descIndex === -1) {
+    console.error(`${lang} 언어에 대한 헤어스타일 열을 찾을 수 없습니다.`);
+    return;
+  }
+  
+  // 기존 스타일 카드 삭제
+  const styleGrid = document.getElementById('style-grid');
+  styleGrid.innerHTML = '';
+  
+  // 데이터 행을 순회하며 스타일 카드 생성
+  data.slice(1).forEach(row => {
+    if (!row[nameIndex]) return; // 이름이 없으면 건너뛰기
+    
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.dataset.category = row[categoryIndex];
+    
+    card.innerHTML = `
+      <div class="h-48 bg-gray-200" style="background-image: url('${row[imageIndex]}'); background-size: cover; background-position: center;"></div>
+      <div class="p-4">
+        <h3 class="font-bold text-lg">${row[nameIndex]}</h3>
+        <p class="text-sm mb-2">${row[descIndex]}</p>
+        <div class="flex justify-between text-sm mb-3">
+          <span>Duration: ${row[durationIndex]} mins</span>
+          <span>₩${parseInt(row[priceIndex]).toLocaleString()}</span>
+        </div>
+        <div class="flex space-x-2">
+          <a href="#reservation" class="btn-primary text-sm py-1 px-3">Book</a>
+        </div>
+      </div>
+    `;
+    
+    styleGrid.appendChild(card);
+  });
+  
+  // 탭 필터 재설정
+  resetTabFilters();
+}
+
+// 스타일리스트 데이터 처리 및 업데이트
+function processStylists(data, lang) {
+  // 헤더 행 가져오기
+  const headers = data[0];
+  
+  // 열 인덱스 찾기
+  const nameIndex = headers.findIndex(header => header.toLowerCase() === 'name');
+  const positionIndex = headers.findIndex(header => header.toLowerCase() === `position_${lang}`);
+  const experienceIndex = headers.findIndex(header => header.toLowerCase() === 'experience');
+  const specialtiesIndex = headers.findIndex(header => header.toLowerCase() === `specialties_${lang}`);
+  const languagesIndex = headers.findIndex(header => header.toLowerCase() === 'languages');
+  const imageIndex = headers.findIndex(header => header.toLowerCase() === 'image_url');
+  const bioIndex = headers.findIndex(header => header.toLowerCase() === `bio_${lang}`);
+  
+  if (nameIndex === -1 || positionIndex === -1) {
+    console.error(`${lang} 언어에 대한 스타일리스트 열을 찾을 수 없습니다.`);
+    return;
+  }
+  
+  // 기존 스타일리스트 카드 삭제
+  const stylistGrid = document.querySelector('.stylist-grid');
+  stylistGrid.innerHTML = '';
+  
+  // 데이터 행을 순회하며 스타일리스트 카드 생성
+  data.slice(1).forEach(row => {
+    if (!row[nameIndex]) return; // 이름이 없으면 건너뛰기
+    
+    const card = document.createElement('div');
+    card.className = 'card text-center p-6';
+    
+    card.innerHTML = `
+      <div class="stylist-image bg-gray-200 mb-4" style="background-image: url('${row[imageIndex]}'); background-size: cover; background-position: center;"></div>
+      <h3 class="font-bold text-lg">${row[nameIndex]}</h3>
+      <p class="mb-2" style="color: #D1887F;">${row[positionIndex]}</p>
+      <p class="text-sm mb-3">Experience: ${row[experienceIndex]} years</p>
+      <p class="text-sm">Specialties: ${row[specialtiesIndex]}</p>
+      <p class="text-sm mt-4">Fluent in: ${row[languagesIndex]}</p>
+      ${bioIndex !== -1 && row[bioIndex] ? `<p class="text-sm mt-4 text-gray-600">${row[bioIndex]}</p>` : ''}
+    `;
+    
+    stylistGrid.appendChild(card);
+  });
+}
+
+// 후기 데이터 처리 및 업데이트
+function processReviews(data, lang) {
+  // 헤더 행 가져오기
+  const headers = data[0];
+  
+  // 열 인덱스 찾기
+  const nameIndex = headers.findIndex(header => header.toLowerCase() === 'name');
+  const nationalityIndex = headers.findIndex(header => header.toLowerCase() === 'nationality');
+  const ratingIndex = headers.findIndex(header => header.toLowerCase() === 'rating');
+  const reviewIndex = headers.findIndex(header => header.toLowerCase() === `review_${lang}`);
+  const serviceIndex = headers.findIndex(header => header.toLowerCase() === 'service');
+  const image1Index = headers.findIndex(header => header.toLowerCase() === 'image_url1');
+  const image2Index = headers.findIndex(header => header.toLowerCase() === 'image_url2');
+  
+  if (nameIndex === -1 || reviewIndex === -1) {
+    console.error(`${lang} 언어에 대한 후기 열을 찾을 수 없습니다.`);
+    return;
+  }
+  
+  // 기존 후기 카드 삭제
+  const reviewGrid = document.querySelector('.review-grid');
+  reviewGrid.innerHTML = '';
+  
+  // 데이터 행을 순회하며 후기 카드 생성
+  data.slice(1).forEach(row => {
+    if (!row[nameIndex] || !row[reviewIndex]) return; // 이름이나 후기가 없으면 건너뛰기
+    
+    const card = document.createElement('div');
+    card.className = 'card';
+    
+    // 별점 HTML 생성
+    let starsHtml = '';
+    const rating = parseFloat(row[ratingIndex]);
+    for (let i = 1; i <= 5; i++) {
+      if (i <= rating) {
+        starsHtml += '<i class="fas fa-star"></i>';
+      } else if (i - 0.5 <= rating) {
+        starsHtml += '<i class="fas fa-star-half-alt"></i>';
+      } else {
+        starsHtml += '<i class="far fa-star"></i>';
+      }
+    }
+    
+    card.innerHTML = `
+      <div class="p-6">
+        <div class="flex items-center mb-4">
+          <div class="w-12 h-12 rounded-full bg-gray-300 mr-4"></div>
+          <div>
+            <h4 class="font-bold">${row[nameIndex]}</h4>
+            <div>
+              <span class="nationality-tag">${row[nationalityIndex]}</span>
+              <span class="text-yellow-500">
+                ${starsHtml}
+              </span>
+            </div>
+          </div>
+        </div>
+        <p class="mb-4">"${row[reviewIndex]}"</p>
+        <p class="text-sm mb-3">Service: ${row[serviceIndex]}</p>
+        <div class="flex space-x-2">
+          <div class="w-1/2 h-32 bg-gray-200 rounded" style="background-image: url('${row[image1Index]}'); background-size: cover; background-position: center;"></div>
+          <div class="w-1/2 h-32 bg-gray-200 rounded" style="background-image: url('${row[image2Index]}'); background-size: cover; background-position: center;"></div>
+        </div>
+      </div>
+    `;
+    
+    reviewGrid.appendChild(card);
+  });
+}
+
+// FAQ 데이터 처리 및 업데이트
+function processFAQ(data, lang) {
+  // 헤더 행 가져오기
+  const headers = data[0];
+  
+  // 열 인덱스 찾기
+  const questionIndex = headers.findIndex(header => header.toLowerCase() === `question_${lang}`);
+  const answerIndex = headers.findIndex(header => header.toLowerCase() === `answer_${lang}`);
+  
+  if (questionIndex === -1 || answerIndex === -1) {
+    console.error(`${lang} 언어에 대한 FAQ 열을 찾을 수 없습니다.`);
+    return;
+  }
+  
+  // FAQ 컨테이너 찾기
+  const faqContainer = document.querySelector('#faq .max-w-3xl');
+  faqContainer.innerHTML = '';
+  
+  // 데이터 행을 순회하며 FAQ 항목 생성
+  data.slice(1).forEach(row => {
+    if (!row[questionIndex] || !row[answerIndex]) return; // 질문이나 답변이 없으면 건너뛰기
+    
+    const faqItem = document.createElement('div');
+    faqItem.className = 'faq-item';
+    
+    faqItem.innerHTML = `
+      <div class="faq-question">
+        <span>${row[questionIndex]}</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="faq-answer">
+        <p>${row[answerIndex]}</p>
+      </div>
+    `;
+    
+    faqContainer.appendChild(faqItem);
+  });
+  
+  // FAQ 아코디언 이벤트 리스너 재설정
+  setupFAQAccordion();
+}
+
+// 연락처 데이터 처리 및 업데이트
+function processContact(data, lang) {
+  // 헤더 행 가져오기
+  const headers = data[0];
+  
+  // 열 인덱스 찾기
+  const keyIndex = headers.findIndex(header => header.toLowerCase() === 'key');
+  const valueIndex = headers.findIndex(header => header.toLowerCase() === `value_${lang}`);
+  
+  if (keyIndex === -1 || valueIndex === -1) {
+    console.error(`${lang} 언어에 대한 연락처 열을 찾을 수 없습니다.`);
+    return;
+  }
+  
+  // 데이터 행을 순회하며 연락처 정보 업데이트
+  data.slice(1).forEach(row => {
+    const key = row[keyIndex];
+    const value = row[valueIndex];
+    
+    if (!key || !value) return; // 키나 값이 없으면 건너뛰기
+    
+    // 키에 따라 적절한 요소 업데이트
+    switch (key) {
+      case 'address':
+        document.querySelector('.contact-card p').textContent = value;
+        break;
+      case 'hours':
+        document.querySelectorAll('.contact-card p')[1].textContent = value;
+        break;
+      case 'subway':
+        document.querySelectorAll('.contact-card p')[2].textContent = value;
+        break;
+      case 'bus':
+        document.querySelectorAll('.contact-card p')[3].textContent = value;
+        break;
+      case 'map_image':
+        if (value) {
+          document.querySelector('.contact-card .w-full.h-80').style.backgroundImage = `url('${value}')`;
+        }
+        break;
+    }
+  });
+}
+
+// 언어 변경 시 콘텐츠 업데이트
+function updateContent(lang) {
+  loadSheetData();
+}
+
+// 스타일 탭 필터 재설정
+function resetTabFilters() {
+  document.querySelectorAll('#style-tabs .tab-btn').forEach(tab => {
+    tab.addEventListener('click', function() {
+      // 모든 탭에서 활성 클래스 제거
+      document.querySelectorAll('#style-tabs .tab-btn').forEach(t => {
+        t.classList.remove('active');
+      });
+      
+      // 클릭한 탭에 활성 클래스 추가
+      this.classList.add('active');
+      
+      const filter = this.getAttribute('data-filter');
+      const cards = document.querySelectorAll('#style-grid .card');
+      
+      cards.forEach(card => {
+        if (filter === 'all' || card.getAttribute('data-category') === filter) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+}
+
+// FAQ 아코디언 기능 설정
+function setupFAQAccordion() {
+  document.querySelectorAll('.faq-question').forEach(question => {
+    question.addEventListener('click', () => {
+      const answer = question.nextElementSibling;
+      answer.classList.toggle('active');
+      const icon = question.querySelector('i');
+      icon.classList.toggle('fa-chevron-up');
+      icon.classList.toggle('fa-chevron-down');
+    });
+  });
+}
+      </script>
+      
 </body>
 </html>
